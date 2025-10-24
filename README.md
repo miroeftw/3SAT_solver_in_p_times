@@ -27,41 +27,41 @@ This project documents one such attempt and its analysis.
 
 ### Notation
 
-* Let (\Phi) be a CNF formula where each clause has exactly three literals (3SAT instance).
-* For each clause (C=(l_1\vee l_2\vee l_3)) we introduce a fresh auxiliary variable (a_C).
-* Let (\Psi) be the 2-CNF obtained by replacing each such (C) by (\textsf{Transformer}(l_1,l_2,l_3,a_C)).
+* Let $\Phi$ be a CNF formula where each clause has exactly three literals (3SAT instance).
+* For each clause $C=(l_1\vee l_2\vee l_3)$ we introduce a fresh auxiliary variable $a_C$.
+* Let $\Psi$ be the 2-CNF obtained by replacing each such $C$ by $\textsf{Transformer}(l_1,l_2,l_3,a_C)$.
 
 ### Proposition
 
-If (\Phi) is satisfiable then (\Psi) is satisfiable.
+If $\Phi$ is satisfiable then $\Psi$ is satisfiable.
 
-**Proof (sketch).** Let (v) be a satisfying assignment for (\Phi). For each clause (C=(l_1\vee l_2\vee l_3)) set (a_C := v(l_1)\lor v(l_2)). Check that all three 2-clauses are satisfied:
+**Proof (sketch).** Let $v$ be a satisfying assignment for $\Phi$. For each clause $C=(l_1\vee l_2\vee l_3)$ set $a_C := v(l_1)\lor v(l_2)$. Check that all three 2-clauses are satisfied:
 
-* If (v(l_1)) or (v(l_2)) is `TRUE` then (a_C=) `TRUE` and ((\neg l_1\vee a_C)) and ((\neg l_2\vee a_C)) hold; ((a_C\vee l_3)) holds since (a_C) is `TRUE`.
-* If both (v(l_1),v(l_2)) are `FALSE` then the clause (C) must have (v(l_3)=) `TRUE`, so with (a_C=) `FALSE` we have ((a_C\vee l_3)) true and ((\neg l_1\vee a_C)=(\neg l_1\vee\textsf{FALSE})=\neg l_1) holds because (l_1) is `FALSE` (so (\neg l_1) true), and similarly for (\neg l_2). Hence all clauses of (\Psi) are satisfied.
+* If $v(l_1)$ or $v(l_2)$ is `TRUE` then $a_C$ is `TRUE` and $(\neg l_1\vee a_C)$ and $(\neg l_2\vee a_C)$ hold; $(a_C\vee l_3)$ holds since $a_C$ is `TRUE`.
+* If both $v(l_1)$ and $v(l_2)$ are `FALSE` then the clause $C$ must have $v(l_3)$ is `TRUE`, so with $a_C$ is `FALSE` we have $(a_C\vee l_3)$ true and $(\neg l_1\vee a_C)=(\neg l_1\vee\textsf{FALSE})=\neg l_1$ holds because $l_1$ is `FALSE` (so $\neg l_1$ true), and similarly for $\neg l_2$. Hence all clauses of $\Psi$ are satisfied.
 
 ### Counterexample
 
-There exist assignments satisfying (\Psi) that do **not** satisfy (\Phi). A canonical counterexample for a single clause:
-[
+There exist assignments satisfying $\Psi$ that do **not** satisfy $\Phi$. A canonical counterexample for a single clause:
+\[
 v(l_1)=\textsf{FALSE},\quad v(l_2)=\textsf{FALSE},\quad v(a)=\textsf{TRUE},\quad v(l_3)=\textsf{FALSE},
-]
-satisfies (\textsf{Transformer}(l_1,l_2,l_3,a)) but falsifies ((l_1\vee l_2\vee l_3)).
+\]
+satisfies $\textsf{Transformer}(l_1,l_2,l_3,a)$ but falsifies $(l_1\vee l_2\vee l_3)$.
 
-Thus (\Psi) is a *relaxation* of (\Phi): (\Phi \models \Psi) but (\Psi \not\models \Phi).
+Thus $\Psi$ is a *relaxation* of $\Phi$: $\Phi \models \Psi$ but $\Psi \not\models \Phi$.
 
 ### Algorithmic pipeline
 
-1. Input: 3SAT instance (\Phi) with (n) variables and (m) clauses.
-2. Transform: for each clause (C_i) introduce (a_i) and add the 3 two-literal clauses from the transformer.
+1. Input: 3SAT instance $\Phi$ with $n$ variables and $m$ clauses.
+2. Transform: for each clause $C_i$ introduce $a_i$ and add the 3 two-literal clauses from the transformer.
    Complexity: (O(m)) time and (O(m)) new variables.
-3. Run a polynomial-time 2SAT solver on (\Psi).
+3. Run a polynomial-time 2SAT solver on $\Psi$.
 
-   * If (\Psi) is unsatisfiable ⇒ (\Phi) is unsatisfiable (by Proposition 1 contrapositive).
-   * If (\Psi) is satisfiable, collect satisfying assignments of (\Psi) and **filter** those that violate the invariant
-     [
+   * If $\Psi$ is unsatisfiable ⇒ $\Phi$ is unsatisfiable (by Proposition 1 contrapositive).
+   * If $\Psi$ is satisfiable, collect satisfying assignments of $\Psi$ and **filter** those that violate the invariant
+     \[
      \text{for any clause }C_i: ; \neg l_{1,i} \land \neg l_{2,i} \land a_i
-     ]
+     \]
      (these are the spurious assignments).
 4. If after filtering at least one assignment remains, return `SAT` and the projected assignment onto the original variables. Otherwise return `UNSAT`.
 
