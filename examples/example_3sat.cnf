@@ -1,0 +1,4 @@
+c example 3-CNF for pipeline tests
+p cnf 3 2
+1 2 3 0
+-1 2 -3 0

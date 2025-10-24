@@ -79,9 +79,10 @@ Thus $\Psi$ is a *relaxation* of $\Phi$: $\Phi \models \Psi$ but $\Psi \not\mode
 │   ├── two_sat_solver.py  # Polynomial-time 2SAT solver
 │   ├── filter.py          # Assignment filtering logic
 │   └── main.py            # Entry point for running experiments
-└── examples/
-    ├── example_3sat.txt   # Example clauses
-    └── example_output.txt # Result after filtering
+├── examples/
+│   ├── example_3sat.txt   # Example clauses
+│   └── example_output.txt # Result after filtering
+└── tests/
 ```
 
 ---
